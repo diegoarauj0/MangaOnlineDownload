@@ -27,7 +27,7 @@ export default async function QueryManga(name: string): Promise<{
 
     mangaChapters.push({
       URL:href,
-      number:Number(href.substring(href.indexOf("capitulo-")).replace(/[^0-9]/g, ""))
+      number:Number(href.substring(href.indexOf("capitulo-") + 9).replace(/[^0-9-]/g, "").replace("-","."))
     })
   })
 

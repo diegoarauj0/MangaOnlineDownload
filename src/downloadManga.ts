@@ -28,14 +28,25 @@ export default async function DownloadManga(mangaName: string, mangaChapters: { 
   }
 
   for (const chapter of mangaChapters) {
-    await Wait(waitForChapter)
+
+    let chapterText = chapter.number.toString().padStart(3, '0')
+
+    if (!Number.isInteger(chapter.number)) {
+      chapterText = chapter.number.toString().substring(chapter.number.toString().indexOf("."),0).padStart(3, '0')
+      chapterText += `-${chapter.number.toString().substring(chapter.number.toString().indexOf(".") + 1)}`
+    }
+
+    const chapterURL = path.join(__dirname, "/..", "/downloads",`/${name}`, `/Chapter ${chapterText}`)
 
     try {
-      if (fs.existsSync(path.join(__dirname, "/..", "/downloads",`/${name}`, `/Chapter ${chapter.number.toString().padStart(3, '0')}`))) {
+      if (fs.existsSync(chapterURL)) {
+        console.log(`|  Skipping chapter ${chapter.number}`)
         continue
       }
 
-      console.log(`|  Downloading Chapter ${chapter.URL}`)
+      await Wait(waitForChapter)
+
+      console.log(`|  Downloading Chapter ${chapter.number}`)
 
       const response = await fetch(chapter.URL, {
         method: "GET"
@@ -47,21 +58,21 @@ export default async function DownloadManga(mangaName: string, mangaChapters: { 
 
       const elements = dom.window.document.querySelector(".content")?.querySelectorAll("img") as NodeListOf<HTMLImageElement>
 
-      await fs.promises.mkdir(path.join(__dirname, "/..", "/downloads",`/${name}`, `/Chapter ${chapter.number.toString().padStart(3, '0')}`))
+      await fs.promises.mkdir(chapterURL)
 
       let index = 1
 
       for (const imageElement of elements) {
         await Wait(waitForPage)
-        console.log(`|    Downloading Page ${imageElement.src}`)
-        await DownloadImage(imageElement.src, path.join(__dirname, "/..", "/downloads",`/${name}`, `/Chapter ${chapter.number.toString().padStart(3, '0')}`, `/${index.toString().padStart(3, '0')}.jpg`))
+        console.log(`|    Downloading Page ${index}`)
+        await DownloadImage(imageElement.src, path.join(chapterURL, `/${index.toString().padStart(3, '0')}.jpg`))
         index ++
       }
 
     } catch {
       console.log(" Unable to download this chapter")
-      if (fs.existsSync(path.join(__dirname, "/..", "/downloads",`/${name}`, `/Chapter ${chapter.number.toString().padStart(3, '0')}`))) {
-        await fs.promises.unlink(path.join(__dirname, "/..", "/downloads",`/${name}`, `/Chapter ${chapter.number.toString().padStart(3, '0')}`))
+      if (fs.existsSync(chapterURL)) {
+        await fs.promises.unlink(chapterURL)
       }
     }
   }     
