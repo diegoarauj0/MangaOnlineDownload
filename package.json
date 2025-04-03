@@ -1,0 +1,31 @@
+{
+  "name": "mangaonlinedownload",
+  "version": "1.0.0",
+  "description": "Fazer download dos mangás do manga online",
+  "homepage": "https://github.com/diegoarauj0/MangaOnlineDownload#readme",
+  "bugs": {
+    "url": "https://github.com/diegoarauj0/MangaOnlineDownload/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegoarauj0/MangaOnlineDownload.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "jsdom": "^26.0.0"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

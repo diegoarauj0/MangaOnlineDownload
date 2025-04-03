@@ -1,0 +1,5 @@
+{
+  "baseURL": "https://mangaonline.biz",
+  "waitForChapter": 6000,
+  "waitForPage": 500
+}
